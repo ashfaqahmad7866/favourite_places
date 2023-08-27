@@ -1,44 +1,32 @@
 import 'package:favourite_places/main.dart';
+import 'package:favourite_places/providers/user_places.dart';
 import 'package:favourite_places/screens/new_places.dart';
 import 'package:flutter/material.dart';
 import 'package:favourite_places/models/place.dart';
 import 'package:favourite_places/screens/places_details.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Places extends StatefulWidget {
+class Places extends ConsumerWidget {
   const Places({super.key});
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userPlaces = ref.watch(userPlacesNotifier);
+    void newPlace() async {
+       Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return const NewPlaces();
+          },
+        ),
+      );
+    }
 
-  @override
-  State<Places> createState() => _PlacesState();
-}
-
-final List<PlaceData> dum = [];
-
-class _PlacesState extends State<Places> {
-  void newPlace() async {
-    final placeName = await Navigator.of(context).push<PlaceData>(
-      MaterialPageRoute(
-        builder: (context) {
-          return const NewPlaces();
-        },
+    Widget content = const Center(
+      child: Text(
+        'No place added yet!',
+        style: TextStyle(
+            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
       ),
     );
-    if (placeName == null) {
-      return;
-    }
-    setState(() {
-      dum.add(placeName);
-    });
-  }
-
-  Widget content = const Center(
-    child: Text(
-      'No place added yet!',
-      style: TextStyle(
-          color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-    ),
-  );
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Your Places'), actions: [
         IconButton(
@@ -46,30 +34,29 @@ class _PlacesState extends State<Places> {
           icon: const Icon(Icons.add),
         ),
       ]),
-      body: dum.isEmpty
+      body: userPlaces.isEmpty
           ? content
           : ListView.builder(
-              itemCount: dum.length,
+              itemCount: userPlaces.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                  onTap: () { 
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
                         builder: (context) {
-                          return const PlacesDetails();
+                          return  PlacesDetails(place: userPlaces[index],);
                         },
-                      ));
-                    },
-                    child: ListTile(
-                      title: Text(
-                        dum[index].name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
                       ),
-                    ));
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(
+                      userPlaces[index].name,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                  ),
+                );
               },
             ),
     );
