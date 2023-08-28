@@ -1,13 +1,12 @@
-import 'package:favourite_places/main.dart';
 import 'package:favourite_places/providers/user_places.dart';
 import 'package:favourite_places/screens/new_places.dart';
 import 'package:flutter/material.dart';
-import 'package:favourite_places/models/place.dart';
 import 'package:favourite_places/screens/places_details.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Places extends ConsumerWidget {
   const Places({super.key});
+  @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userPlaces = ref.watch(userPlacesNotifier);
     void newPlace() async {

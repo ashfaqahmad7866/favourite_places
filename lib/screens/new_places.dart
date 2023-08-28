@@ -1,9 +1,10 @@
 // ignore_for_file: unnecessary_null_comparison, prefer_typing_uninitialized_variables
 
 import 'package:favourite_places/providers/user_places.dart';
+import 'package:favourite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
-import 'package:favourite_places/models/place.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 class NewPlaces extends ConsumerStatefulWidget {
   const NewPlaces({super.key});
 
@@ -16,7 +17,7 @@ class _NewPlacesState extends ConsumerState<NewPlaces> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       ref.read(userPlacesNotifier.notifier).addPlace(placeName);
-      Navigator.of(context).pop(); 
+      Navigator.of(context).pop();
     }
   }
 
@@ -35,7 +36,9 @@ class _NewPlacesState extends ConsumerState<NewPlaces> {
             key: formKey,
             child: Column(
               children: [
-                TextFormField(style: TextStyle(color: Theme.of(context).colorScheme.onBackground),
+                TextFormField(
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground),
                   decoration: const InputDecoration(
                     label: Text('Enter place name'),
                   ),
@@ -47,10 +50,15 @@ class _NewPlacesState extends ConsumerState<NewPlaces> {
                     }
                     return null;
                   },
-                  onSaved: (newValue) => placeName=newValue,
+                  onSaved: (newValue) => placeName = newValue,
                 ),
                 const SizedBox(
                   height: 12,
+                ),
+                const Row(
+                  children: [
+                    Expanded(child: ImageInput()),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
