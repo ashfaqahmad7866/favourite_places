@@ -49,6 +49,7 @@ class Places extends ConsumerWidget {
                     );
                   },
                   child: ListTile(
+                    leading: CircleAvatar( radius: 26,backgroundImage:FileImage( userPlaces[index].image,)),
                     title: Text(
                       userPlaces[index].name,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(

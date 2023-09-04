@@ -2,8 +2,10 @@
 
 import 'package:favourite_places/providers/user_places.dart';
 import 'package:favourite_places/widgets/image_input.dart';
+import 'package:favourite_places/widgets/location_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
 
 class NewPlaces extends ConsumerStatefulWidget {
   const NewPlaces({super.key});
@@ -13,10 +15,11 @@ class NewPlaces extends ConsumerStatefulWidget {
 }
 
 class _NewPlacesState extends ConsumerState<NewPlaces> {
+  late File selectedImage;
   void savePlaces() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      ref.read(userPlacesNotifier.notifier).addPlace(placeName);
+      ref.read(userPlacesNotifier.notifier).addPlace(placeName, selectedImage);
       Navigator.of(context).pop();
     }
   }
@@ -55,11 +58,18 @@ class _NewPlacesState extends ConsumerState<NewPlaces> {
                 const SizedBox(
                   height: 12,
                 ),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: ImageInput()),
+                    Expanded(
+                        child: ImageInput(
+                      onPickImage: (image) => selectedImage = image,
+                    )),
                   ],
                 ),
+                const SizedBox(
+                  height: 12,
+                ),
+                const LocationInput(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
